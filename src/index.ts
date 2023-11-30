@@ -18,7 +18,7 @@ interface Ilecturer {
 class School {
     // implement 'add area', 'remove area', 'add lecturer', and 'remove lecturer' methods
 
-    _areas: {}[] = [];
+    _areas: Area[] = [];
     _lecturers: Ilecturer[] = []; // Name, surname, position, company, experience, courses, contacts
 
     get areas(): {}[] {
@@ -29,7 +29,7 @@ class School {
         return this._lecturers;
     }
 
-    addArea (field: {}): void {
+    addArea (field: Area): void {
         const areaExistence: boolean = Boolean(
             this._areas.filter((area: {}) => area.areaName === field.areaName)
         )
@@ -37,7 +37,7 @@ class School {
         !areaExistence ? this._areas.push(field) : null
     }
 
-    removeArea (field: {}): void {
+    removeArea (field: Area): void {
         this._areas.filter((area: {}) => area.areaName != field.areaName)
     }
 
@@ -59,7 +59,7 @@ class School {
 
 class Area {
     // implement getters for fields and 'add/remove level' methods
-    _levels: {}[] = [];
+    _levels: Level[] = [];
     _name: string;
 
     constructor(name: string) {
@@ -70,17 +70,17 @@ class Area {
         return this._name
     }
 
-    get levels (): {}[] {
+    get levels (): Level[] {
         return this._levels
     }
 
-    addLevel (rate: {}): void {
+    addLevel (rate: Level): void {
         const levelExistence: {}[] = this._levels.filter((level: {}) => level.levelName === rate.levelName)
 
         !levelExistence ? this._levels.push(rate) : null
     }
 
-    removeLevel (rate: {}): void {
+    removeLevel (rate: Level): void {
         this._levels.filter((level: {}) => level.levelName != rate.levelName)
     }
 }
@@ -88,7 +88,7 @@ class Area {
 class Level {
     // implement getters for fields and 'add/remove group' methods
 
-    _groups: {}[] = [];
+    _groups: Group[] = [];
     _name: string;
     _description: string
 
@@ -97,7 +97,7 @@ class Level {
         this._description = description;
     }
 
-    get groups (): {}[] {
+    get groups (): Group[] {
         return this._groups
     }
 
@@ -109,7 +109,7 @@ class Level {
         return this._description
     }
 
-    addGroup (group: {}): void {
+    addGroup (group: Group): void {
         const groupExistence: boolean = Boolean(
             this._groups.filter((team: {}) => team.name === group.name)
         )
@@ -117,7 +117,7 @@ class Level {
         !groupExistence ? this._groups.push(group) : null
     }
 
-    removeGroup (group: {}): void {
+    removeGroup (group: Group): void {
         this._groups.filter((team: {}) => team.name != group.name)
     }
 }
@@ -129,7 +129,7 @@ class Group {
     _status: studyingStatuses;
     directionName: string
     levelName: string
-    _students: {}[] = []; // Modify the array so that it has a valid toSorted method*
+    _students: Student[] = []; // Modify the array so that it has a valid toSorted method*
 
     constructor(directionName: string, levelName: string) {
         this.directionName = directionName;
@@ -148,14 +148,18 @@ class Group {
         return this._area
     }
 
-    addStudent (student: {}): void {
+    get students (): Student[] {
+        return this._students
+    }
+
+    addStudent (student: Student): void {
         const studentExistence: boolean = Boolean(
             this._students.filter((applicant: {}): boolean => applicant.fullName === student.fullName)
         )
         !studentExistence ? this._students.push(student) : null
     }
 
-    removeStudent (student: {}): void {
+    removeStudent (student: Student): void {
         this._students.filter((applicant: {}) => applicant.fullName !== student.fullName)
     }
 
@@ -168,14 +172,11 @@ class Group {
 }
 
 class Student {
-    // implement 'set grade' and 'set visit' methods
 
     _firstName: string;
     _lastName: string;
     _birthYear: number;
-    // _grades: [string, number][] = []; // workName: mark
     _grades: {[computedProperty: string]: number} = {}
-    // _visits: [string, boolean][] = []; // lesson: present
     _visits: {[computedProperty: string]: boolean} = {}
 
     constructor(firstName: string, lastName: string, birthYear: number) {
@@ -197,12 +198,10 @@ class Student {
     }
 
     set grade(discipline: [string, number]) {
-        // this._grades.push(discipline)
         this._grades[`${discipline[0]}`] = discipline[1]
     }
 
     set visit(presence: [string, boolean]) {
-        // this._visits.push(presence)
         this._visits[`${presence[0]}`] = presence[1]
     }
 
@@ -217,7 +216,6 @@ class Student {
 
         const attendancePercentage: number = presenceValues
             .reduce((acc: number, presence: number) => acc + presence, 0) / presenceValues.length * 100
-            // (this._visits.filter(present => present[1]).length / this._visits.length) * 100;
 
         return (averageGrade + attendancePercentage) / 2;
     }
